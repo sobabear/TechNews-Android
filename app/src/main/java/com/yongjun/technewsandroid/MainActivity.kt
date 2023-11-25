@@ -42,6 +42,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.yongjun.technewsandroid.CommonView.WebViewScreen
 import com.yongjun.technewsandroid.Model.NewsItem
 import com.yongjun.technewsandroid.Service.HTMLParserManager
 import com.yongjun.technewsandroid.ui.theme.TechNewsAndroidTheme
@@ -196,29 +197,4 @@ private fun convertUnixTimestampToDateTime(timestamp: Long): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     return localDateTime.format(formatter)
-}
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TechNewsAndroidTheme {
-        Greeting("Android")
-    }
-}
-
-@Composable
-fun WebViewScreen(url: String) {
-    AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = { context ->
-            WebView(context).apply {
-                webViewClient = WebViewClient()
-                loadUrl(url)
-            }
-        }
-    )
 }

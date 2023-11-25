@@ -72,37 +72,6 @@ object HTMLParserManager {
         }
     }
 
-    suspend fun getWebPageImage(url: URL): Bitmap? {
-        if (cache.containsKey(url)) {
-            Log.d("hello", "111")
-            return cache[url]
-        }
-        if (parsedCache.contains(url)) {
-            Log.d("hello", "222")
-            return null
-        }
-        try {
-            val data: Bitmap? = withContext(Dispatchers.IO) {
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                val inputStream = connection.inputStream
-                val image = BitmapFactory.decodeStream(inputStream)
-                inputStream.close()
-                image
-            }
-
-            if (data != null) {
-                cache[url] = data
-            }
-            Log.d("hello", "3333")
-            return data
-        } catch (e: IOException) {
-            Log.d("hello", "error: ${e}")
-            // Handle IO exception
-        }
-        Log.d("hello", "444")
-        return null
-    }
 }
 
 fun String.stripOutHtml(): String? {
