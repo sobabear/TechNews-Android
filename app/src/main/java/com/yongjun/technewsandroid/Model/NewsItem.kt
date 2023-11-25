@@ -5,5 +5,6 @@ data class NewsItem(
     val url: String?,
     val score: Int?,
     val author: String?,
-    val time: Long?
+    val time: Long?,
+    val id: String
 )

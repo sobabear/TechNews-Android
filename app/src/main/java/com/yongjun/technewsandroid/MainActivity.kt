@@ -4,9 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,7 +34,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.yongjun.technewsandroid.Model.NewsItem
 import com.yongjun.technewsandroid.Service.HTMLParserManager
@@ -52,17 +61,42 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    NewsApp()
+//                    NewsApp()
+                    NewsNavApp()
                 }
             }
         }
     }
 }
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
-fun NewsApp() {
+fun NewsNavApp() {
+    val navController = rememberNavController()
     val viewModel: MainViewModel = viewModel()
     val newsItems = viewModel.newsItems.value
+
+    NavHost(navController = navController, startDestination = "newsList") {
+        composable("newsList") {
+            NewsList(navController, newsItems)
+        }
+        composable("newsDetail/{newsId}") { backStackEntry ->
+            val newsItemId = backStackEntry.arguments?.getString("newsId")
+            val index = newsItems.indexOfFirst {
+                it.id == newsItemId
+            }
+            val newsItem = newsItems.get(index = index)
+            newsItem.url?.let { WebViewScreen(it) }
+
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun NewsList(
+    nav: NavHostController,
+    newsItems: List<NewsItem>
+) {
 
     Column {
 
@@ -70,7 +104,7 @@ fun NewsApp() {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(newsItems) { item ->
-                NewsItemCard(item)
+                NewsItemCard(item, navController = nav)
             }
         }
     }
@@ -78,12 +112,15 @@ fun NewsApp() {
 
 
 @Composable
-fun NewsItemCard(newsItem: NewsItem) {
+fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                navController.navigate("newsDetail/${newsItem.id}")
+            },
             shape = RoundedCornerShape(16.dp),
-//            .clickable { /* Handle click on the news item if needed */ },
+
         elevation = 4.dp
     ) {
         Row(
@@ -171,4 +208,17 @@ fun DefaultPreview() {
     TechNewsAndroidTheme {
         Greeting("Android")
     }
+}
+
+@Composable
+fun WebViewScreen(url: String) {
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = { context ->
+            WebView(context).apply {
+                webViewClient = WebViewClient()
+                loadUrl(url)
+            }
+        }
+    )
 }
