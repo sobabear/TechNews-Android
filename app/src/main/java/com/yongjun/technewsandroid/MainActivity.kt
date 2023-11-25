@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -24,6 +25,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +37,10 @@ import com.yongjun.technewsandroid.Model.NewsItem
 import com.yongjun.technewsandroid.Service.HTMLParserManager
 import com.yongjun.technewsandroid.ui.theme.TechNewsAndroidTheme
 import java.net.URL
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +66,9 @@ fun NewsApp() {
 
     Column {
 
-        LazyColumn {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             items(newsItems) { item ->
                 NewsItemCard(item)
             }
@@ -73,8 +81,8 @@ fun NewsApp() {
 fun NewsItemCard(newsItem: NewsItem) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
 //            .clickable { /* Handle click on the news item if needed */ },
         elevation = 4.dp
     ) {
@@ -99,53 +107,43 @@ fun NewsItemCard(newsItem: NewsItem) {
             imageUrlState.value?.let {
                 AsyncImage(
                     model = it,
-                    contentDescription = newsItem.title
+                    contentDescription = newsItem.title,
+                    modifier = Modifier.size(100.dp, 100.dp),
+                    contentScale = ContentScale.Crop
                 )
             }
-
-        }
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = newsItem.title,
-                style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Author: ${newsItem.author}",
-                style = MaterialTheme.typography.body2,
-                fontSize = 14.sp
-            )
-
-            Text(
-                text = "Score: ${newsItem.score}",
-                style = MaterialTheme.typography.body2,
-                fontSize = 14.sp
-            )
-            Text(
-                text = "Time: ${newsItem.time?.let { convertUnixTimestampToDateTime(it) }}",
-                style = MaterialTheme.typography.body2,
-                fontSize = 14.sp
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            newsItem.url?.let {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
                 Text(
-                    text = it,
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier
-                        .fillMaxWidth()
-        //                    .clickable { /* Handle click on the URL if needed */ }
+                    text = newsItem.title,
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.fillMaxWidth()
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "${newsItem.author}",
+                    style = MaterialTheme.typography.body2,
+                    fontSize = 14.sp
+                )
+
+                Text(
+                    text = "👍: ${newsItem.score}",
+                    style = MaterialTheme.typography.body2,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "${newsItem.time?.let { convertUnixTimestampToDateTime(it) }}",
+                    style = MaterialTheme.typography.body2,
+                    fontSize = 14.sp
+                )
+
             }
         }
     }
@@ -154,10 +152,14 @@ fun NewsItemCard(newsItem: NewsItem) {
 @Composable
 private fun convertUnixTimestampToDateTime(timestamp: Long): String {
     // Convert Unix timestamp to a readable date and time format
-    // You can use your preferred date and time formatting logic here
-    return ""
-}
+    val instant = Instant.ofEpochSecond(timestamp)
+    val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
 
+    // Define a custom date and time format
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+    return localDateTime.format(formatter)
+}
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
