@@ -181,7 +181,11 @@ fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
                     style = MaterialTheme.typography.body2,
                     fontSize = 14.sp
                 )
-
+                Text (
+                    text = "${newsItem.url}",
+                    style = MaterialTheme.typography.caption,
+                    fontSize = 12.sp
+                )
             }
         }
     }
