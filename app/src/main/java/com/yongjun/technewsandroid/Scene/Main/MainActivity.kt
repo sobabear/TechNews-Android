@@ -1,45 +1,33 @@
-package com.yongjun.technewsandroid
+package com.yongjun.technewsandroid.Scene.Main
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.LightGray
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,9 +35,9 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.yongjun.technewsandroid.CommonView.WebViewScreen
 import com.yongjun.technewsandroid.Model.NewsItem
+import com.yongjun.technewsandroid.Scene.Bottom.MainScreenView
 import com.yongjun.technewsandroid.Service.HTMLParserManager
 import com.yongjun.technewsandroid.ui.theme.TechNewsAndroidTheme
-import java.net.URL
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -60,14 +48,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TechNewsAndroidTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-//                    NewsApp()
-                    NewsNavApp()
-                }
+                MainScreenView()
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colors.background
+//                ) {
+//                    NewsNavApp()
+//                }
             }
         }
     }

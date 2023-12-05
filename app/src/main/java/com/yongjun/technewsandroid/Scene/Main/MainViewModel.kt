@@ -1,4 +1,4 @@
-package com.yongjun.technewsandroid
+package com.yongjun.technewsandroid.Scene.Main
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

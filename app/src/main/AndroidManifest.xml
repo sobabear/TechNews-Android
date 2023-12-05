@@ -11,7 +11,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.TechNewsAndroid">
         <activity
-            android:name=".MainActivity"
+            android:name=".Scene.Main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TechNewsAndroid">
