@@ -36,6 +36,7 @@ import coil.compose.AsyncImage
 import com.yongjun.technewsandroid.CommonView.WebViewScreen
 import com.yongjun.technewsandroid.Model.NewsItem
 import com.yongjun.technewsandroid.Scene.Bottom.MainScreenView
+import com.yongjun.technewsandroid.Scene.Setting.navSetting
 import com.yongjun.technewsandroid.Service.HTMLParserManager
 import com.yongjun.technewsandroid.ui.theme.TechNewsAndroidTheme
 import java.time.Instant
@@ -109,7 +110,6 @@ fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
             .fillMaxWidth()
             .clickable {
                 navController.navigate("newsDetail/${newsItem.id}")
-                Log.d("12121", "${newsItem.url}")
             },
             shape = RoundedCornerShape(16.dp),
 
