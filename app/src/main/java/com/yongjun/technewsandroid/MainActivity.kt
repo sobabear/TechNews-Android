@@ -9,6 +9,7 @@ import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -119,6 +122,7 @@ fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
             .fillMaxWidth()
             .clickable {
                 navController.navigate("newsDetail/${newsItem.id}")
+                Log.d("12121", "${newsItem.url}")
             },
             shape = RoundedCornerShape(16.dp),
 
@@ -142,14 +146,15 @@ fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
                     imageUrlState.value = imageUrl
                 }
             }
-            imageUrlState.value?.let {
-                AsyncImage(
-                    model = it,
-                    contentDescription = newsItem.title,
-                    modifier = Modifier.size(100.dp, 100.dp),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            AsyncImage(
+                model = imageUrlState.value,
+                contentDescription = newsItem.title,
+                modifier = Modifier
+                    .size(100.dp, 100.dp)
+                    .background(LightGray, RoundedCornerShape(16))
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale =  ContentScale.Crop
+            )
             Column(
                 modifier = Modifier
                     .padding(16.dp)
@@ -166,7 +171,7 @@ fun NewsItemCard(newsItem: NewsItem, navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "${newsItem.author}",
+                    text = "Author: ${newsItem.author}",
                     style = MaterialTheme.typography.body2,
                     fontSize = 14.sp
                 )
