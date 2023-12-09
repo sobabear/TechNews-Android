@@ -7,7 +7,8 @@ class SettingViewModel: ViewModel() {
     val settingItems = mutableStateOf(
         listOf(
             SettingItem("Contact", "💌", "aringod7@gmail.com", null),
-            SettingItem("Version", "🔖", "1.1", null)
+            SettingItem("Source", "👀", "Hacker News", null),
+            SettingItem("Version", "🔖", "1.2", null)
         )
     )
 }
