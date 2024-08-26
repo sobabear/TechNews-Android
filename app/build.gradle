@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.yongjun.technewsandroid"
         minSdk 28
-        targetSdk 33
-        versionCode 3
-        versionName "1.2"
+        targetSdk 34
+        versionCode 5
+        versionName "1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
